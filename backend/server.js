@@ -4,6 +4,9 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
+// Import protection middleware
+const protect = require('./middleware/authMiddleware');
+
 const app = express();
 const PORT = process.env.PORT || 5000;
 
@@ -67,7 +70,7 @@ app.post('/api/login', async (req, res) => {
 
         // Generate JWT Token valid for 1 hour
         const token = jwt.sign(
-            { id: user._id, role: user.role }, 
+            { userId: user._id, role: user.role }, 
             process.env.JWT_SECRET || 'fallback_secret', 
             { expiresIn: '1h' }
         );
@@ -76,6 +79,14 @@ app.post('/api/login', async (req, res) => {
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
+});
+
+// Protected Route Example
+app.get('/api/protected', protect, (req, res) => {
+    res.json({ 
+        message: 'You have accessed a protected route successfully!', 
+        userId: req.user 
+    });
 });
 
 app.listen(PORT, () => {
