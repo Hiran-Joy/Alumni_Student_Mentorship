@@ -4,8 +4,9 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
-// Import protection middleware
+// Import protection and role-check middlewares
 const protect = require('./middleware/authMiddleware');
+const authorizeRoles = require('./middleware/roleMiddleware');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -81,11 +82,19 @@ app.post('/api/login', async (req, res) => {
     }
 });
 
-// Protected Route Example
+// Protected Route Example (Any authenticated user)
 app.get('/api/protected', protect, (req, res) => {
     res.json({ 
         message: 'You have accessed a protected route successfully!', 
         userId: req.user 
+    });
+});
+
+// Role-Restricted Route Example (Only Alumni or Admin can access)
+app.get('/api/alumni-dashboard', protect, authorizeRoles('Alumni', 'Admin'), (req, res) => {
+    res.json({ 
+        message: 'Welcome to the exclusive alumni mentorship dashboard!', 
+        user: req.user 
     });
 });
 
