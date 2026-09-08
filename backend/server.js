@@ -98,6 +98,20 @@ app.get('/api/alumni-dashboard', protect, authorizeRoles('Alumni', 'Admin'), (re
     });
 });
 
+// User Profile Route (Updated to handle direct user ID or object structures safely)
+app.get('/api/profile', protect, async (req, res) => {
+    try {
+        const userId = req.user.userId || req.user;
+        const user = await User.findById(userId).select('-password');
+        if (!user) {
+            return res.status(404).json({ message: "User not found!" });
+        }
+        res.json(user);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
 app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
 });
