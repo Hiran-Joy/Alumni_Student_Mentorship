@@ -1,6 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
+import ChatBox from './ChatBox';
 
 export default function StudentDashboard({ alumniList, studentRequests, sendConnectionRequest }) {
+  const [activeChat, setActiveChat] = useState(null); // { id, name }
+  const currentUserId = localStorage.getItem('token');
+  const token = localStorage.getItem('token');
+
   return (
     <div>
       <h4>Available Alumni Mentors</h4>
@@ -22,18 +27,37 @@ export default function StudentDashboard({ alumniList, studentRequests, sendConn
 
       <h4>My Connection Requests</h4>
       {studentRequests.length === 0 ? <p>You haven't sent any connection requests yet.</p> : (
-        <ul className="list-group">
+        <ul className="list-group mb-4">
           {studentRequests.map(req => (
             <li key={req._id} className="list-group-item d-flex justify-content-between align-items-center">
               <div>
-                <strong>Alumni:</strong> {req.alumni?.email} <br />
+                <strong>Alumni:</strong> {req.alumni?.email || req.alumni?.name} <br />
               </div>
-              <span className={`badge ${req.status === 'Accepted' ? 'bg-success' : req.status === 'Rejected' ? 'bg-danger' : 'bg-warning text-dark'}`}>
-                {req.status}
-              </span>
+              <div className="d-flex align-items-center">
+                <span className={`badge me-3 ${req.status === 'Accepted' ? 'bg-success' : req.status === 'Rejected' ? 'bg-danger' : 'bg-warning text-dark'}`}>
+                  {req.status}
+                </span>
+                {req.status === 'Accepted' && (
+                  <button 
+                    className="btn btn-sm btn-dark"
+                    onClick={() => setActiveChat({ id: req.alumni._id, name: req.alumni.name || req.alumni.email })}
+                  >
+                    {activeChat?.id === req.alumni._id ? 'Close Chat' : 'Open Chat'}
+                  </button>
+                )}
+              </div>
             </li>
           ))}
         </ul>
+      )}
+
+      {activeChat && (
+        <ChatBox 
+          currentUserId={currentUserId} 
+          recipientId={activeChat.id} 
+          recipientName={activeChat.name} 
+          token={token} 
+        />
       )}
     </div>
   );

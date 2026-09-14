@@ -30,7 +30,7 @@ export default function AuthForm({ page, setPage, email, setEmail, password, set
               <select className="form-select" value={selectedRole} onChange={e => setSelectedRole(e.target.value)}>
                 <option value="Student">Student</option>
                 <option value="Alumni">Alumni</option>
-                <option value="Admin">Admin</option>
+                {/* <option value="Admin">Admin</option> */}
               </select>
             </div>
           )}
