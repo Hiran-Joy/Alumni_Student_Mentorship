@@ -1,6 +1,31 @@
 import React from 'react';
 
-export default function AuthForm({ page, setPage, email, setEmail, password, setPassword, selectedRole, setSelectedRole, message, handleAuth }) {
+export default function AuthForm({ 
+  page, 
+  setPage, 
+  email, 
+  setEmail, 
+  password, 
+  setPassword, 
+  selectedRole, 
+  setSelectedRole, 
+  name, 
+  setName, 
+  collegeId, 
+  setCollegeId, 
+  batch, 
+  setBatch, 
+  branch, 
+  setBranch, 
+  company, 
+  setCompany, 
+  jobTitle, 
+  setJobTitle, 
+  experience, 
+  setExperience, 
+  message, 
+  handleAuth 
+}) {
   return (
     <div className="container mt-4">
       <nav className="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
@@ -12,28 +37,129 @@ export default function AuthForm({ page, setPage, email, setEmail, password, set
         </div>
       </nav>
 
-      <div className="mt-4" style={{ maxWidth: '400px', margin: '0 auto' }}>
+      <div className="mt-4" style={{ maxWidth: '450px', margin: '0 auto' }}>
         <h3 className="mb-3">{page === 'register' ? 'Create an Account' : 'Login to Your Account'}</h3>
         {message && <div className="alert alert-info">{message}</div>}
         <form onSubmit={handleAuth}>
-          <div className="mb-3">
-            <label className="form-label">Email address</label>
-            <input type="email" className="form-control" value={email} onChange={e => setEmail(e.target.value)} required />
-          </div>
-          <div className="mb-3">
-            <label className="form-label">Password</label>
-            <input type="password" className="form-control" value={password} onChange={e => setPassword(e.target.value)} required />
-          </div>
           {page === 'register' && (
             <div className="mb-3">
-              <label className="form-label">Role</label>
-              <select className="form-select" value={selectedRole} onChange={e => setSelectedRole(e.target.value)}>
-                <option value="Student">Student</option>
-                <option value="Alumni">Alumni</option>
-                {/* <option value="Admin">Admin</option> */}
-              </select>
+              <label className="form-label">Full Name</label>
+              <input 
+                type="text" 
+                className="form-control" 
+                value={name} 
+                onChange={e => setName(e.target.value)} 
+                required 
+              />
             </div>
           )}
+
+          <div className="mb-3">
+            <label className="form-label">Email address</label>
+            <input 
+              type="email" 
+              className="form-control" 
+              value={email} 
+              onChange={e => setEmail(e.target.value)} 
+              required 
+            />
+          </div>
+
+          <div className="mb-3">
+            <label className="form-label">Password</label>
+            <input 
+              type="password" 
+              className="form-control" 
+              value={password} 
+              onChange={e => setPassword(e.target.value)} 
+              required 
+            />
+          </div>
+
+          {page === 'register' && (
+            <>
+              <div className="mb-3">
+                <label className="form-label">Role</label>
+                <select 
+                  className="form-select" 
+                  value={selectedRole} 
+                  onChange={e => setSelectedRole(e.target.value)}
+                >
+                  <option value="Student">Student</option>
+                  <option value="Alumni">Alumni</option>
+                </select>
+              </div>
+
+              {selectedRole === 'Student' ? (
+                <>
+                  <div className="mb-3">
+                    <label className="form-label">College ID Number</label>
+                    <input 
+                      type="text" 
+                      className="form-control" 
+                      value={collegeId} 
+                      onChange={e => setCollegeId(e.target.value)} 
+                      required 
+                    />
+                  </div>
+                  <div className="mb-3">
+                    <label className="form-label">Batch / Graduation Year</label>
+                    <input 
+                      type="text" 
+                      className="form-control" 
+                      value={batch} 
+                      onChange={e => setBatch(e.target.value)} 
+                      required 
+                    />
+                  </div>
+                  <div className="mb-3">
+                    <label className="form-label">Branch / Major</label>
+                    <input 
+                      type="text" 
+                      className="form-control" 
+                      value={branch} 
+                      onChange={e => setBranch(e.target.value)} 
+                      required 
+                    />
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="mb-3">
+                    <label className="form-label">Current Company</label>
+                    <input 
+                      type="text" 
+                      className="form-control" 
+                      value={company} 
+                      onChange={e => setCompany(e.target.value)} 
+                      required 
+                    />
+                  </div>
+                  <div className="mb-3">
+                    <label className="form-label">Job Title / Role</label>
+                    <input 
+                      type="text" 
+                      className="form-control" 
+                      value={jobTitle} 
+                      onChange={e => setJobTitle(e.target.value)} 
+                      required 
+                    />
+                  </div>
+                  <div className="mb-3">
+                    <label className="form-label">Years of Experience</label>
+                    <input 
+                      type="text" 
+                      className="form-control" 
+                      value={experience} 
+                      onChange={e => setExperience(e.target.value)} 
+                      required 
+                    />
+                  </div>
+                </>
+              )}
+            </>
+          )}
+
           <button type="submit" className="btn btn-primary w-100 mb-2">
             {page === 'register' ? 'Register' : 'Login'}
           </button>

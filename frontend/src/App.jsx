@@ -16,6 +16,16 @@ export default function App() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [selectedRole, setSelectedRole] = useState('Student');
+  
+  // New registration profile states
+  const [name, setName] = useState('');
+  const [collegeId, setCollegeId] = useState('');
+  const [batch, setBatch] = useState('');
+  const [branch, setBranch] = useState('');
+  const [company, setCompany] = useState('');
+  const [jobTitle, setJobTitle] = useState('');
+  const [experience, setExperience] = useState('');
+
   const [message, setMessage] = useState('');
   
   const [publicAlumni, setPublicAlumni] = useState([]);
@@ -48,7 +58,20 @@ export default function App() {
     setMessage('');
     try {
       if (page === 'register') {
-        const res = await axios.post(`${API_URL}/register`, { email, password, role: selectedRole });
+        const payload = {
+          name,
+          email,
+          password,
+          role: selectedRole,
+          collegeId: selectedRole === 'Student' ? collegeId : undefined,
+          batch: selectedRole === 'Student' ? batch : undefined,
+          branch: selectedRole === 'Student' ? branch : undefined,
+          company: selectedRole === 'Alumni' ? company : undefined,
+          jobTitle: selectedRole === 'Alumni' ? jobTitle : undefined,
+          experience: selectedRole === 'Alumni' ? experience : undefined
+        };
+
+        const res = await axios.post(`${API_URL}/register`, payload);
         setMessage(res.data.message);
         setPage('login');
       } else {
@@ -152,6 +175,20 @@ export default function App() {
         setPassword={setPassword} 
         selectedRole={selectedRole} 
         setSelectedRole={setSelectedRole} 
+        name={name}
+        setName={setName}
+        collegeId={collegeId}
+        setCollegeId={setCollegeId}
+        batch={batch}
+        setBatch={setBatch}
+        branch={branch}
+        setBranch={setBranch}
+        company={company}
+        setCompany={setCompany}
+        jobTitle={jobTitle}
+        setJobTitle={setJobTitle}
+        experience={experience}
+        setExperience={setExperience}
         message={message} 
         handleAuth={handleAuth} 
       />
