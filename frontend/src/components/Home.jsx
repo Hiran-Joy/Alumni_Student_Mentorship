@@ -1,6 +1,9 @@
 import React from 'react';
 
 export default function Home({ publicAlumni, page, setPage }) {
+  // Limit to latest 6 alumni for the home page display
+  const latestAlumni = publicAlumni.slice(0, 6);
+
   return (
     <div className="container mt-4">
       <nav className="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
@@ -17,12 +20,16 @@ export default function Home({ publicAlumni, page, setPage }) {
         <p className="lead">Connect with experienced alumni mentors to guide your academic and professional journey.</p>
       </div>
       
-      <h3 className="mb-4">Available Alumni Mentors Directory</h3>
-      {publicAlumni.length === 0 ? (
+      <div className="d-flex justify-content-between align-items-center mb-3">
+        <h3>Featured Alumni Mentors</h3>
+        <span className="text-muted small">Showing latest {latestAlumni.length} of {publicAlumni.length} approved mentors</span>
+      </div>
+
+      {latestAlumni.length === 0 ? (
         <p className="text-muted">No approved alumni available right now.</p>
       ) : (
         <div className="row">
-          {publicAlumni.map(a => (
+          {latestAlumni.map(a => (
             <div className="col-md-4 mb-4" key={a._id}>
               <div className="card h-100 shadow-sm text-center p-3">
                 <div className="d-flex justify-content-center mb-3">
