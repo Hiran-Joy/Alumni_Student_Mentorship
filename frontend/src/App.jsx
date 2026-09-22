@@ -17,8 +17,9 @@ export default function App() {
   const [password, setPassword] = useState('');
   const [selectedRole, setSelectedRole] = useState('Student');
   
-  // New registration profile states
+  // Registration profile states including profilePic
   const [name, setName] = useState('');
+  const [profilePic, setProfilePic] = useState('');
   const [collegeId, setCollegeId] = useState('');
   const [batch, setBatch] = useState('');
   const [branch, setBranch] = useState('');
@@ -63,6 +64,7 @@ export default function App() {
           email,
           password,
           role: selectedRole,
+          profilePic,
           collegeId: selectedRole === 'Student' ? collegeId : undefined,
           batch: selectedRole === 'Student' ? batch : undefined,
           branch: selectedRole === 'Student' ? branch : undefined,
@@ -177,6 +179,8 @@ export default function App() {
         setSelectedRole={setSelectedRole} 
         name={name}
         setName={setName}
+        profilePic={profilePic}
+        setProfilePic={setProfilePic}
         collegeId={collegeId}
         setCollegeId={setCollegeId}
         batch={batch}

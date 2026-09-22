@@ -11,6 +11,7 @@ export default function AuthForm({
   setSelectedRole, 
   name, 
   setName, 
+  setProfilePic,
   collegeId, 
   setCollegeId, 
   batch, 
@@ -26,6 +27,17 @@ export default function AuthForm({
   message, 
   handleAuth 
 }) {
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setProfilePic(reader.result); // Converts image to Base64 string
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   return (
     <div className="container mt-4">
       <nav className="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
@@ -42,16 +54,27 @@ export default function AuthForm({
         {message && <div className="alert alert-info">{message}</div>}
         <form onSubmit={handleAuth}>
           {page === 'register' && (
-            <div className="mb-3">
-              <label className="form-label">Full Name</label>
-              <input 
-                type="text" 
-                className="form-control" 
-                value={name} 
-                onChange={e => setName(e.target.value)} 
-                required 
-              />
-            </div>
+            <>
+              <div className="mb-3">
+                <label className="form-label">Full Name</label>
+                <input 
+                  type="text" 
+                  className="form-control" 
+                  value={name} 
+                  onChange={e => setName(e.target.value)} 
+                  required 
+                />
+              </div>
+              <div className="mb-3">
+                <label className="form-label">Profile Picture (Optional)</label>
+                <input 
+                  type="file" 
+                  className="form-control" 
+                  accept="image/*"
+                  onChange={handleImageUpload} 
+                />
+              </div>
+            </>
           )}
 
           <div className="mb-3">

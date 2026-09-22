@@ -17,21 +17,43 @@ export default function Home({ publicAlumni, page, setPage }) {
         <p className="lead">Connect with experienced alumni mentors to guide your academic and professional journey.</p>
       </div>
       
-      <h3 className="mb-3">Available Alumni Mentors Directory</h3>
+      <h3 className="mb-4">Available Alumni Mentors Directory</h3>
       {publicAlumni.length === 0 ? (
         <p className="text-muted">No approved alumni available right now.</p>
       ) : (
-        <ul className="list-group">
+        <div className="row">
           {publicAlumni.map(a => (
-            <li key={a._id} className="list-group-item d-flex justify-content-between align-items-center">
-              <div>
-                <strong>{a.name || a.email}</strong><br />
-                <small className="text-muted">{a.email}</small>
+            <div className="col-md-4 mb-4" key={a._id}>
+              <div className="card h-100 shadow-sm text-center p-3">
+                <div className="d-flex justify-content-center mb-3">
+                  {a.profilePic ? (
+                    <img 
+                      src={a.profilePic} 
+                      alt={a.name} 
+                      className="rounded-circle" 
+                      style={{ width: '80px', height: '80px', objectFit: 'cover' }} 
+                    />
+                  ) : (
+                    <div 
+                      className="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center" 
+                      style={{ width: '80px', height: '80px', fontSize: '28px' }}
+                    >
+                      {a.name ? a.name.charAt(0).toUpperCase() : 'A'}
+                    </div>
+                  )}
+                </div>
+                <div className="card-body p-0">
+                  <h5 className="card-title fw-bold mb-1">{a.name || 'Alumni'}</h5>
+                  <p className="text-muted small mb-2">{a.email}</p>
+                  <p className="mb-1"><strong>Company:</strong> {a.company || 'N/A'}</p>
+                  <p className="mb-1"><strong>Role:</strong> {a.jobTitle || 'N/A'}</p>
+                  <p className="mb-3"><strong>Experience:</strong> {a.experience ? `${a.experience} Years` : 'N/A'}</p>
+                  <span className="badge bg-success">Verified Mentor</span>
+                </div>
               </div>
-              <span className="badge bg-success">Verified Mentor</span>
-            </li>
+            </div>
           ))}
-        </ul>
+        </div>
       )}
     </div>
   );
