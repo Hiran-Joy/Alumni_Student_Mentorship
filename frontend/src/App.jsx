@@ -36,11 +36,10 @@ export default function App() {
   const [adminUsers, setAdminUsers] = useState([]);
 
   useEffect(() => {
-    if (!token) {
-      if (page === 'home') {
-        fetchPublicAlumni();
-      }
-    } else {
+    if (page === 'home') {
+      fetchPublicAlumni();
+    }
+    if (token) {
       if (role === 'Alumni') fetchAlumniRequests();
       else if (role === 'Student') { fetchAlumniList(); fetchStudentRequests(); }
       else if (role === 'Admin') fetchAdminUsers();
@@ -82,6 +81,7 @@ export default function App() {
         localStorage.setItem('role', res.data.role);
         setToken(res.data.token);
         setRole(res.data.role);
+        setPage('dashboard');
       }
     } catch (err) {
       setMessage(err.response?.data?.message || 'An error occurred');
@@ -136,6 +136,15 @@ export default function App() {
   };
 
   const sendConnectionRequest = async (alumniId) => {
+    if (!token) {
+      alert('Please log in as a student to connect with mentors.');
+      setPage('login');
+      return;
+    }
+    if (role === 'Alumni') {
+      alert('Alumni accounts cannot send connection requests.');
+      return;
+    }
     try {
       await axios.post(`${API_URL}/connection-request`, { alumniId }, {
         headers: { Authorization: `Bearer ${token}` }
@@ -163,52 +172,106 @@ export default function App() {
     } catch (err) { alert('Failed to update status'); }
   };
 
-  if (!token) {
-    if (page === 'home') {
-      return <Home publicAlumni={publicAlumni} page={page} setPage={setPage} />;
-    }
+  // If viewing the public home page
+  if (page === 'home') {
     return (
-      <AuthForm 
-        page={page} 
-        setPage={setPage} 
-        email={email} 
-        setEmail={setEmail} 
-        password={password} 
-        setPassword={setPassword} 
-        selectedRole={selectedRole} 
-        setSelectedRole={setSelectedRole} 
-        name={name}
-        setName={setName}
-        profilePic={profilePic}
-        setProfilePic={setProfilePic}
-        collegeId={collegeId}
-        setCollegeId={setCollegeId}
-        batch={batch}
-        setBatch={setBatch}
-        branch={branch}
-        setBranch={setBranch}
-        company={company}
-        setCompany={setCompany}
-        jobTitle={jobTitle}
-        setJobTitle={setJobTitle}
-        experience={experience}
-        setExperience={setExperience}
-        message={message} 
-        handleAuth={handleAuth} 
-      />
+      <div>
+        <nav className="navbar navbar-expand-lg navbar-dark bg-dark px-4 mb-4">
+          <a className="navbar-brand" href="#home" onClick={() => setPage('home')}>Alumni Platform</a>
+          <div className="navbar-nav ms-auto">
+            <button className="btn btn-link nav-link text-white" onClick={() => setPage('home')}>Home</button>
+            {token ? (
+              <>
+                <button className="btn btn-link nav-link text-white" onClick={() => setPage('dashboard')}>Dashboard</button>
+                <button className="btn btn-outline-light btn-sm ms-2" onClick={handleLogout}>Logout</button>
+              </>
+            ) : (
+              <>
+                <button className="btn btn-link nav-link text-white" onClick={() => setPage('login')}>Login</button>
+                <button className="btn btn-link nav-link text-white" onClick={() => setPage('register')}>Register</button>
+              </>
+            )}
+          </div>
+        </nav>
+        <Home 
+          publicAlumni={publicAlumni} 
+          page={page} 
+          setPage={setPage} 
+          sendConnectionRequest={sendConnectionRequest} 
+        />
+      </div>
     );
   }
 
-  return (
-    <div className="container mt-4">
-      <div className="d-flex justify-content-between align-items-center mb-4">
-        <h2>Dashboard ({role})</h2>
-        <button className="btn btn-danger" onClick={handleLogout}>Logout</button>
-      </div>
+  // If viewing authentication pages
+  if (!token || page === 'login' || page === 'register') {
+    if (page !== 'login' && page !== 'register') {
+      // default to login if no token and not home
+    } else {
+      return (
+        <div>
+          <nav className="navbar navbar-expand-lg navbar-dark bg-dark px-4 mb-4">
+            <a className="navbar-brand" href="#home" onClick={() => setPage('home')}>Alumni Platform</a>
+            <div className="navbar-nav ms-auto">
+              <button className="btn btn-link nav-link text-white" onClick={() => setPage('home')}>Home</button>
+              <button className="btn btn-link nav-link text-white" onClick={() => setPage('login')}>Login</button>
+              <button className="btn btn-link nav-link text-white" onClick={() => setPage('register')}>Register</button>
+            </div>
+          </nav>
+          <AuthForm 
+            page={page} 
+            setPage={setPage} 
+            email={email} 
+            setEmail={setEmail} 
+            password={password} 
+            setPassword={setPassword} 
+            selectedRole={selectedRole} 
+            setSelectedRole={setSelectedRole} 
+            name={name}
+            setName={setName}
+            profilePic={profilePic}
+            setProfilePic={setProfilePic}
+            collegeId={collegeId}
+            setCollegeId={setCollegeId}
+            batch={batch}
+            setBatch={setBatch}
+            branch={branch}
+            setBranch={setBranch}
+            company={company}
+            setCompany={setCompany}
+            jobTitle={jobTitle}
+            setJobTitle={setJobTitle}
+            experience={experience}
+            setExperience={setExperience}
+            message={message} 
+            handleAuth={handleAuth} 
+          />
+        </div>
+      );
+    }
+  }
 
-      {role === 'Admin' && <AdminDashboard adminUsers={adminUsers} updateUserStatus={updateUserStatus} />}
-      {role === 'Alumni' && <AlumniDashboard requests={requests} updateRequestStatus={updateRequestStatus} />}
-      {role === 'Student' && <StudentDashboard alumniList={alumniList} studentRequests={studentRequests} sendConnectionRequest={sendConnectionRequest} />}
+  // Logged-in Dashboard View
+  return (
+    <div>
+      <nav className="navbar navbar-expand-lg navbar-dark bg-dark px-4 mb-4">
+        <a className="navbar-brand" href="#home" onClick={() => setPage('home')}>Alumni Platform</a>
+        <div className="navbar-nav ms-auto">
+          <button className="btn btn-link nav-link text-white" onClick={() => setPage('home')}>Explore Home</button>
+          <button className="btn btn-link nav-link text-white active" onClick={() => setPage('dashboard')}>Dashboard</button>
+          <button className="btn btn-outline-light btn-sm ms-2" onClick={handleLogout}>Logout</button>
+        </div>
+      </nav>
+
+      <div className="container mt-4">
+        <div className="d-flex justify-content-between align-items-center mb-4">
+          <h2>Dashboard ({role})</h2>
+        </div>
+
+        {role === 'Admin' && <AdminDashboard adminUsers={adminUsers} updateUserStatus={updateUserStatus} />}
+        {role === 'Alumni' && <AlumniDashboard requests={requests} updateRequestStatus={updateRequestStatus} />}
+        {role === 'Student' && <StudentDashboard alumniList={alumniList} studentRequests={studentRequests} sendConnectionRequest={sendConnectionRequest} />}
+      </div>
     </div>
   );
 }

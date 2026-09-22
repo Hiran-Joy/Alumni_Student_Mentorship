@@ -39,18 +39,9 @@ export default function AuthForm({
   };
 
   return (
-    <div className="container mt-4">
-      <nav className="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
-        <h2>Alumni Mentorship Platform</h2>
-        <div>
-          <button className={`btn btn-sm me-2 ${page === 'home' ? 'btn-dark' : 'btn-outline-dark'}`} onClick={() => setPage('home')}>Home</button>
-          <button className={`btn btn-sm me-2 ${page === 'login' ? 'btn-dark' : 'btn-outline-dark'}`} onClick={() => setPage('login')}>Login</button>
-          <button className={`btn btn-sm ${page === 'register' ? 'btn-dark' : 'btn-outline-dark'}`} onClick={() => setPage('register')}>Register</button>
-        </div>
-      </nav>
-
-      <div className="mt-4" style={{ maxWidth: '450px', margin: '0 auto' }}>
-        <h3 className="mb-3">{page === 'register' ? 'Create an Account' : 'Login to Your Account'}</h3>
+    <div className="container mt-4" style={{ maxWidth: '450px' }}>
+      <div className="card shadow-sm p-4">
+        <h3 className="mb-3 text-center">{page === 'register' ? 'Create an Account' : 'Login to Your Account'}</h3>
         {message && <div className="alert alert-info">{message}</div>}
         <form onSubmit={handleAuth}>
           {page === 'register' && (

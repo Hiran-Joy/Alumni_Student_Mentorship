@@ -40,7 +40,6 @@ export default function AlumniDashboard({ requests, updateRequestStatus }) {
       setMessage('');
     } catch (err) {
       console.error('Failed to load profile data', err.response || err);
-      // Display the exact server error message on the screen
       const errorMsg = err.response?.data?.message || err.message || 'Could not load profile details.';
       setMessage(`Error: ${errorMsg}`);
     }
@@ -113,7 +112,7 @@ export default function AlumniDashboard({ requests, updateRequestStatus }) {
       {/* Collapsible View & Edit Profile Menu */}
       {isEditing && (
         <div className="card shadow-sm p-4 mb-5" style={{ maxWidth: '600px' }}>
-          <h4 className="mb-3">Laura's Profile Details</h4>
+          <h4 className="mb-3">{name ? `${name}'s Profile Details` : "Profile Details"}</h4>
           <form onSubmit={handleUpdateProfile}>
             
             {/* Profile Picture Preview */}
@@ -226,7 +225,13 @@ export default function AlumniDashboard({ requests, updateRequestStatus }) {
                 {req.status === 'Accepted' && (
                   <button 
                     className="btn btn-sm btn-dark ms-2"
-                    onClick={() => setActiveChat({ id: req.student._id, name: req.student.name || req.student.email })}
+                    onClick={() => {
+                      if (activeChat?.id === req.student._id) {
+                        setActiveChat(null);
+                      } else {
+                        setActiveChat({ id: req.student._id, name: req.student.name || req.student.email });
+                      }
+                    }}
                   >
                     {activeChat?.id === req.student._id ? 'Close Chat' : 'Open Chat'}
                   </button>
