@@ -175,80 +175,59 @@ export default function App() {
   // If viewing the public home page
   if (page === 'home') {
     return (
-      <div>
-        <nav className="navbar navbar-expand-lg navbar-dark bg-dark px-4 mb-4">
-          <a className="navbar-brand" href="#home" onClick={() => setPage('home')}>Alumni Platform</a>
-          <div className="navbar-nav ms-auto">
-            <button className="btn btn-link nav-link text-white" onClick={() => setPage('home')}>Home</button>
-            {token ? (
-              <>
-                <button className="btn btn-link nav-link text-white" onClick={() => setPage('dashboard')}>Dashboard</button>
-                <button className="btn btn-outline-light btn-sm ms-2" onClick={handleLogout}>Logout</button>
-              </>
-            ) : (
-              <>
-                <button className="btn btn-link nav-link text-white" onClick={() => setPage('login')}>Login</button>
-                <button className="btn btn-link nav-link text-white" onClick={() => setPage('register')}>Register</button>
-              </>
-            )}
-          </div>
-        </nav>
-        <Home 
-          publicAlumni={publicAlumni} 
-          page={page} 
-          setPage={setPage} 
-          sendConnectionRequest={sendConnectionRequest} 
-        />
-      </div>
+      <Home 
+        publicAlumni={publicAlumni} 
+        page={page} 
+        setPage={setPage} 
+        token={token}
+        handleLogout={handleLogout}
+        sendConnectionRequest={sendConnectionRequest} 
+      />
     );
   }
 
   // If viewing authentication pages
   if (!token || page === 'login' || page === 'register') {
-    if (page !== 'login' && page !== 'register') {
-      // default to login if no token and not home
-    } else {
-      return (
-        <div>
-          <nav className="navbar navbar-expand-lg navbar-dark bg-dark px-4 mb-4">
-            <a className="navbar-brand" href="#home" onClick={() => setPage('home')}>Alumni Platform</a>
-            <div className="navbar-nav ms-auto">
-              <button className="btn btn-link nav-link text-white" onClick={() => setPage('home')}>Home</button>
-              <button className="btn btn-link nav-link text-white" onClick={() => setPage('login')}>Login</button>
-              <button className="btn btn-link nav-link text-white" onClick={() => setPage('register')}>Register</button>
-            </div>
-          </nav>
-          <AuthForm 
-            page={page} 
-            setPage={setPage} 
-            email={email} 
-            setEmail={setEmail} 
-            password={password} 
-            setPassword={setPassword} 
-            selectedRole={selectedRole} 
-            setSelectedRole={setSelectedRole} 
-            name={name}
-            setName={setName}
-            profilePic={profilePic}
-            setProfilePic={setProfilePic}
-            collegeId={collegeId}
-            setCollegeId={setCollegeId}
-            batch={batch}
-            setBatch={setBatch}
-            branch={branch}
-            setBranch={setBranch}
-            company={company}
-            setCompany={setCompany}
-            jobTitle={jobTitle}
-            setJobTitle={setJobTitle}
-            experience={experience}
-            setExperience={setExperience}
-            message={message} 
-            handleAuth={handleAuth} 
-          />
-        </div>
-      );
-    }
+    return (
+      <div>
+        <nav className="navbar navbar-expand-lg navbar-dark bg-dark px-4 mb-4">
+          <a className="navbar-brand" href="#home" onClick={() => setPage('home')}>Alumni Platform</a>
+          <div className="navbar-nav ms-auto">
+            <button className="btn btn-link nav-link text-white" onClick={() => setPage('home')}>Home</button>
+            <button className="btn btn-link nav-link text-white" onClick={() => setPage('login')}>Login</button>
+            <button className="btn btn-link nav-link text-white" onClick={() => setPage('register')}>Register</button>
+          </div>
+        </nav>
+        <AuthForm 
+          page={page} 
+          setPage={setPage} 
+          email={email} 
+          setEmail={setEmail} 
+          password={password} 
+          setPassword={setPassword} 
+          selectedRole={selectedRole} 
+          setSelectedRole={setSelectedRole} 
+          name={name}
+          setName={setName}
+          profilePic={profilePic}
+          setProfilePic={setProfilePic}
+          collegeId={collegeId}
+          setCollegeId={setCollegeId}
+          batch={batch}
+          setBatch={setBatch}
+          branch={branch}
+          setBranch={setBranch}
+          company={company}
+          setCompany={setCompany}
+          jobTitle={jobTitle}
+          setJobTitle={setJobTitle}
+          experience={experience}
+          setExperience={setExperience}
+          message={message} 
+          handleAuth={handleAuth} 
+        />
+      </div>
+    );
   }
 
   // Logged-in Dashboard View
